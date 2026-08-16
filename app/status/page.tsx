@@ -111,7 +111,7 @@ export default async function StatusPage({
             fontFamily: "var(--font-body)",
           }}
         />
-        {!isStaffViewer && (
+        {!viewerEmail && (
           <>
             <input
               type="text"
