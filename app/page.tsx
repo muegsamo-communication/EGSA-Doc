@@ -256,7 +256,19 @@ export default async function HomePage() {
         c: mine.filter((r) => r[statusCol] === "อนุมัติ").length,
       };
       // นักศึกษา: เอกสารตีกลับก่อน (ต้องดำเนินการ) ตามด้วยที่กำลังดำเนินอยู่ — สูงสุด 5 รายการ
-      const rejected = mine.filter((r) => r[statusCol] === "ตีกลับ");
+      // *** ไม่แสดงเอกสารตีกลับที่ผู้ยื่นได้ยื่นแก้ไขไปแล้ว — เช็คจากคอลัมน์ "Reference ID"
+      // ของแถวอื่น ๆ ในชีต ว่ามีแถวไหนอ้างอิงกลับมาที่ Tracking ID ของเอกสารตีกลับนี้บ้างไหม ***
+      const referenceCol = data.headers.indexOf("Reference ID");
+      const alreadyResubmittedIds = new Set(
+        referenceCol !== -1
+          ? data.rows.map((r) => (r[referenceCol] || "").trim()).filter(Boolean)
+          : []
+      );
+      const rejected = mine.filter(
+        (r) =>
+          r[statusCol] === "ตีกลับ" &&
+          !alreadyResubmittedIds.has(cell(data.headers, r, "Tracking ID").trim())
+      );
       const inProgress = mine.filter((r) => r[statusCol] === "รอตรวจสอบ" || r[statusCol] === "รอเซ็น");
       notifications = [...rejected, ...inProgress].slice(0, 5).map((r) => ({
         trackingId: cell(data.headers, r, "Tracking ID"),
