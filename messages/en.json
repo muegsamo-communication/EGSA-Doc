@@ -9,11 +9,11 @@
     "profile": "Profile",
     "signOut": "Sign out",
     "signIn": "Sign in with Google",
-    "orgShort": "EGSA Doc"
+    "orgShort": "EGSA Document System"
   },
   "home": {
-    "orgName": "Student Union Document System",
-    "faculty": "EGSA Doc",
+    "orgName": "Student Association Document System",
+    "faculty": "EGSA Document System",
     "loggedOutSubtitle": "Sign in with Google to submit documents, check status, or manage the queue",
     "orUseWithoutLogin": "Or use without signing in:",
     "welcome": "Welcome,",
@@ -265,7 +265,7 @@
   },
   "support": {
     "contactMessage": "Found a problem?",
-    "contactEmail": "PLACEHOLDER_ใส่อีเมลติดต่อจริงตรงนี้@example.com"
+    "contactEmail": "muegsamo@gmail.com"
   },
   "help": {
     "navLabel": "Help",
