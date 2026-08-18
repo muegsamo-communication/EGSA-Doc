@@ -272,7 +272,7 @@
   },
   "support": {
     "contactMessage": "Found a problem?",
-    "contactEmail": "muegsamo@gmail.com"
+    "contactEmail": "PLACEHOLDER_ใส่อีเมลติดต่อจริงตรงนี้@example.com"
   },
   "help": {
     "navLabel": "Help",
@@ -335,14 +335,28 @@
   "privacy": {
     "navLabel": "Privacy Policy",
     "title": "Privacy Policy",
-    "subtitle": "What this system collects and how it’s handled",
-    "section1Title": "What we collect",
-    "section1Body": "Full name, email, phone number, student ID, and any files you attach — some documents may include a copy of your national ID card",
-    "section2Title": "Why we collect it",
-    "section2Body": "To process document review and approval, send status update emails, and contact you if there’s an issue with your submission",
-    "section3Title": "Who can access it",
-    "section3Body": "Only you (the document owner) and staff involved in the approval process. Every file is shared with specific individuals only — never a public link",
-    "section4Title": "Contact about your data",
-    "section4Body": "To ask about, correct, or request deletion of your personal data, please reach out via the contact email shown at the bottom of every page"
+    "intro": "The information entered into this document submission system is personal data collected by the Engineering Student Association, Mahidol University, as follows:",
+    "section1Title": "1. Personal data collected",
+    "section1Item1": "Full name",
+    "section1Item2": "Student ID",
+    "section1Item3": "Email address",
+    "section1Item4": "Contact phone number",
+    "section1Item5": "Attached document files (in some cases may include a copy of your national ID card)",
+    "section2Title": "2. Purpose",
+    "section2Body": "The Engineering Student Association Document Submission System, Mahidol University, collects, stores, uses, and applies limitations on the use or disclosure of personal data in order to carry out the document review and approval process, notify applicants of document status, and to enable contact should there be any questions regarding a submitted document.",
+    "section3Title": "3. Your rights regarding your personal data",
+    "section3Item1": "The right to withdraw consent, and the right to access your personal data",
+    "section3Item2": "The right to request the transfer of your personal data",
+    "section3Item3": "The right to object to the collection, use, or disclosure of your personal data",
+    "section3Item4": "The right to request deletion of your personal data",
+    "section3Item5": "The right to request suspension of use of your personal data",
+    "section3Item6": "The right to request correction of your personal data",
+    "section3Footer": "You may request the deletion or destruction of your personal data, except where the Association is required to retain such data to comply with a relevant process or law (for example, documents that have already been issued an official document number and approved).",
+    "section4Title": "4. Who can access your data",
+    "section4Body": "Only you (the document owner) and staff involved in the approval process. Every file is shared with specific individuals only — never a public link.",
+    "section5Title": "5. Contact regarding your personal data",
+    "section5Body": "To exercise any of the rights listed in Section 3, or if you have questions about your personal data, please contact us via the email shown at the bottom of every page on this site.",
+    "referenceText": "Mahidol University Announcement on Personal Data Protection Policy B.E. 2563",
+    "referenceUrl": "https://op.mahidol.ac.th/ra/contents/PRIVACY-POLICY/MU-PRIVACY-POLICY_TH.pdf"
   }
 }
