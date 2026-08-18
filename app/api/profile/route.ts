@@ -11,6 +11,7 @@ export async function POST(req: Request) {
   const name = String(body.name || "").trim();
   const studentId = String(body.studentId || "").trim();
   const phone = String(body.phone || "").trim();
+  const pdpaConsent = !!body.pdpaConsent;
 
   if (!name) {
     return NextResponse.json({ success: false, error: "กรุณากรอกชื่อ - นามสกุล" }, { status: 400 });
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
         name,
         studentId,
         phone,
+        pdpaConsent,
       }),
     });
     const raw = await res.text();
@@ -41,7 +43,7 @@ export async function POST(req: Request) {
     try {
       data = JSON.parse(raw);
     } catch {
-      data = { success: false, error: "Unexpected response from Apps Script: " + raw.slice(0,200)};
+      data = { success: false, error: "Unexpected response from Apps Script: " + raw };
     }
     return NextResponse.json(data);
   } catch (e) {

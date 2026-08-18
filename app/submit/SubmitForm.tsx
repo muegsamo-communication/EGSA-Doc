@@ -41,6 +41,7 @@ export default function SubmitForm({
   const [agencyValue, setAgencyValue] = useState(initialValues?.agencyValue || "");
   const [previousTrackingId, setPreviousTrackingId] = useState(initialValues?.previousTrackingId || "");
   const [acknowledged, setAcknowledged] = useState(false);
+  const [pdpaConsent, setPdpaConsent] = useState(false);
   const [honeypot, setHoneypot] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -68,6 +69,11 @@ export default function SubmitForm({
       setStatus("error");
       return;
     }
+    if (!pdpaConsent) {
+      setErrorMsg(t("errNoPdpaConsent"));
+      setStatus("error");
+      return;
+    }
     if (!file) {
       setErrorMsg(t("errMissingFile"));
       setStatus("error");
@@ -87,6 +93,7 @@ export default function SubmitForm({
     formData.append("agencyValue", agencyValue);
     formData.append("previousTrackingId", previousTrackingId.trim());
     formData.append("acknowledged", "true");
+    formData.append("pdpaConsent", "true");
     formData.append("file", file);
     // *** Honeypot — ส่งค่าว่างเสมอสำหรับผู้ใช้จริง (ช่องนี้ซ่อนอยู่ คนมองไม่เห็น) ***
     formData.append("website", honeypot);
@@ -362,6 +369,21 @@ export default function SubmitForm({
             style={{ marginTop: 2 }}
           />
           {t("acknowledgeLabel")}
+        </label>
+
+        <label style={{ fontSize: 13, display: "flex", alignItems: "flex-start", gap: 6 }}>
+          <input
+            type="checkbox"
+            checked={pdpaConsent}
+            onChange={(e) => setPdpaConsent(e.target.checked)}
+            style={{ marginTop: 2 }}
+          />
+          <span>
+            {t("pdpaConsentLabel")}{" "}
+            <a href="/privacy" target="_blank" style={{ color: colors.primary }}>
+              {t("pdpaConsentLink")}
+            </a>
+          </span>
         </label>
 
         {status === "error" && <p style={{ color: "#b00020", fontSize: 13 }}>{errorMsg}</p>}

@@ -3,6 +3,7 @@ import { colors } from "@/lib/theme";
 
 export default async function Footer() {
   const t = await getTranslations("support");
+  const tp = await getTranslations("privacy");
 
   return (
     <div
@@ -16,6 +17,10 @@ export default async function Footer() {
       {t("contactMessage")}{" "}
       <a href={`mailto:${t("contactEmail")}`} style={{ color: colors.textMuted, textDecoration: "underline" }}>
         {t("contactEmail")}
+      </a>
+      <span style={{ margin: "0 8px" }}>·</span>
+      <a href="/privacy" style={{ color: colors.textMuted, textDecoration: "underline" }}>
+        {tp("navLabel")}
       </a>
     </div>
   );

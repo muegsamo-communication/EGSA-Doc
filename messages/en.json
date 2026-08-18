@@ -9,11 +9,11 @@
     "profile": "Profile",
     "signOut": "Sign out",
     "signIn": "Sign in with Google",
-    "orgShort": "EGSA Document System"
+    "orgShort": "EGSA Doc"
   },
   "home": {
-    "orgName": "Student Association Document System",
-    "faculty": "EGSA Document System",
+    "orgName": "Student Union Document System",
+    "faculty": "EGSA Doc",
     "loggedOutSubtitle": "Sign in with Google to submit documents, check status, or manage the queue",
     "orUseWithoutLogin": "Or use without signing in:",
     "welcome": "Welcome,",
@@ -136,7 +136,10 @@
     "docNameHintExample": "Example: BudgetRequest_FreshmanOrientation.pdf",
     "emailMismatchWarning": "This email doesn’t match your logged-in account — this document will only show up under the email entered here, not your current login",
     "emailGoogleHint": "Please use an email that’s a Google account (e.g. Gmail) so you can open your document and any links — if your university email isn’t a Google account, please use a personal Gmail instead",
-    "emailDomainHint": "Please use a Gmail or university (.edu) email only (.ac.th not supported)"
+    "emailDomainHint": "Please use a Gmail or university (.edu) email only (.ac.th not supported)",
+    "pdpaConsentLabel": "I consent to the collection and use of my personal data as described in the",
+    "pdpaConsentLink": "Privacy Policy",
+    "errNoPdpaConsent": "Please consent to data collection before submitting"
   },
   "status": {
     "title": "Check Document Status",
@@ -189,7 +192,7 @@
   },
   "profile": {
     "title": "Profile",
-    "loginPrompt": "Sign in with Google to save your details for auto-fill.",
+    "loginPrompt": "Sign in with Google to save your info for auto-filling forms",
     "editSubtitle": "Edit the details used to auto-fill the submission form",
     "firstTimeSubtitle": "First time saving — this will auto-fill future submissions",
     "emailLabel": "Email",
@@ -198,7 +201,11 @@
     "phoneLabel": "Contact phone number",
     "saveButton": "Save",
     "saving": "Saving...",
-    "errMissingName": "Please enter your full name"
+    "errMissingName": "Please enter your full name",
+    "pdpaConsentLabel": "I consent to the collection and use of my personal data as described in the",
+    "pdpaConsentLink": "Privacy Policy",
+    "errNoPdpaConsent": "Please consent to data collection before saving",
+    "pdpaAlreadyConsented": "You consented to data collection on {date}"
   },
   "login": {
     "title": "Sign in"
@@ -265,7 +272,7 @@
   },
   "support": {
     "contactMessage": "Found a problem?",
-    "contactEmail": "muegsamo@gmail.com"
+    "contactEmail": "PLACEHOLDER_ใส่อีเมลติดต่อจริงตรงนี้@example.com"
   },
   "help": {
     "navLabel": "Help",
@@ -324,5 +331,18 @@
     "a6": "You can’t edit it yourself once submitted — please contact the secretary directly for help",
     "q7": "Why do I need Gmail? Can I use my university email (.ac.th)?",
     "a7": "Documents are shared through Google Drive, which only opens for a Google account. If your university email runs on Microsoft/Outlook (not Google), the file link won’t open. Please use a personal Gmail address when submitting instead — no need to link it to your university email at all"
+  },
+  "privacy": {
+    "navLabel": "Privacy Policy",
+    "title": "Privacy Policy",
+    "subtitle": "What this system collects and how it’s handled",
+    "section1Title": "What we collect",
+    "section1Body": "Full name, email, phone number, student ID, and any files you attach — some documents may include a copy of your national ID card",
+    "section2Title": "Why we collect it",
+    "section2Body": "To process document review and approval, send status update emails, and contact you if there’s an issue with your submission",
+    "section3Title": "Who can access it",
+    "section3Body": "Only you (the document owner) and staff involved in the approval process. Every file is shared with specific individuals only — never a public link",
+    "section4Title": "Contact about your data",
+    "section4Body": "To ask about, correct, or request deletion of your personal data, please reach out via the contact email shown at the bottom of every page"
   }
 }
