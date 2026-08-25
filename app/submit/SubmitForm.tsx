@@ -11,6 +11,32 @@ const AGENCY_TYPES = [
   { value: "ภาควิชา - Department", labelKey: "agencyDepartment", sheetKey: "ภาควิชา" as const },
 ];
 
+// ---- Entry ID ของแต่ละช่องในฟอร์มยื่นเอกสาร (Google Form) ----
+// ใช้สร้างลิงก์ที่กรอกข้อมูลไว้ล่วงหน้า ตอนไฟล์ใหญ่เกินขีดจำกัดของเว็บแอป
+// *** ถ้าสร้างฟอร์มใหม่ Entry ID จะเปลี่ยนทั้งหมด ต้องหามาใส่ใหม่ (ดูวิธีในคู่มือส่วนที่ 19.5) ***
+const FORM_ENTRY = {
+  name: "496970711",
+  studentId: "1786944811",
+  email: "1426659741",
+  phone: "593319885",
+  docName: "1025524505",
+  prevTrackingId: "1642743242",
+  agencyType: "476213347",
+  division: "866812361", // ฝ่ายภายในสโมสร
+  club: "1694640136",    // ชมรม
+  dept: "1870349516",    // ภาควิชา
+};
+
+// *** ค่าตัวเลือกหน่วยงานในเว็บแอปสะกดไม่ตรงกับในฟอร์มเป๊ะ ***
+// เว็บแอป: "สโมสรนักศึกษา- Student Association" (ไม่มีเว้นวรรคหน้าขีด)
+// ฟอร์ม  : "สโมสรนักศึกษา - Student Association" (มีเว้นวรรค)
+// ถ้าส่งค่าไม่ตรง ฟอร์มจะไม่เลือกตัวเลือกให้ จึงต้องแมปก่อนเสมอ
+const AGENCY_TYPE_FORM_VALUE: Record<string, string> = {
+  "สโมสรนักศึกษา- Student Association": "สโมสรนักศึกษา - Student Association",
+  "ชมรม - Student Club": "ชมรม - Student Club",
+  "ภาควิชา - Department": "ภาควิชา - Department",
+};
+
 type InitialValues = {
   name: string;
   studentId: string;
@@ -53,6 +79,47 @@ export default function SubmitForm({
 
   const selectedAgency = AGENCY_TYPES.find((a) => a.value === agencyType);
   const valueOptions = selectedAgency ? agencyOptions[selectedAgency.sheetKey] : [];
+
+  /**
+   * สร้างลิงก์ Google Form ที่กรอกข้อมูลที่ผู้ใช้พิมพ์ไว้แล้วให้ล่วงหน้า
+   * ใช้ตอนไฟล์ใหญ่เกินขีดจำกัดของเว็บแอป จะได้ไม่ต้องกรอกใหม่ทั้งหมด
+   *
+   * หมายเหตุ: ช่องแนบไฟล์กับช่องติ๊กยินยอม กรอกล่วงหน้าให้ไม่ได้
+   * — ไฟล์เพราะ Google ไม่รองรับ, ยินยอมเพราะควรเป็นการกระทำโดยเจตนาของผู้ใช้เอง
+   */
+  function buildPrefilledFormUrl(): string {
+    const base = t("googleFormUrl");
+    // ถ้ายังไม่ได้ตั้งลิงก์ไว้ ให้คืนค่าเดิมไปเลย กันลิงก์เพี้ยน
+    if (!base || base.startsWith("REPLACE_ME")) return base;
+
+    const params: [string, string][] = [];
+    const add = (entryId: string, value: string) => {
+      if (value && value.trim()) params.push([`entry.${entryId}`, value.trim()]);
+    };
+
+    add(FORM_ENTRY.name, name);
+    add(FORM_ENTRY.studentId, studentId);
+    add(FORM_ENTRY.email, email);
+    add(FORM_ENTRY.phone, phone);
+    add(FORM_ENTRY.docName, docName);
+    add(FORM_ENTRY.prevTrackingId, previousTrackingId);
+
+    if (agencyType) {
+      add(FORM_ENTRY.agencyType, AGENCY_TYPE_FORM_VALUE[agencyType] || agencyType);
+
+      // *** ใส่เฉพาะช่องหน่วยงานย่อยที่ตรงกับประเภทที่เลือกเท่านั้น ***
+      // ฟอร์มใช้ "Go to section based on answer" — ถ้าใส่ทั้งสามช่องพร้อมกันจะพาไปหน้าผิด
+      if (selectedAgency?.sheetKey === "ฝ่ายภายในสโมสร") add(FORM_ENTRY.division, agencyValue);
+      else if (selectedAgency?.sheetKey === "ชมรม") add(FORM_ENTRY.club, agencyValue);
+      else if (selectedAgency?.sheetKey === "ภาควิชา") add(FORM_ENTRY.dept, agencyValue);
+    }
+
+    if (params.length === 0) return base;
+
+    const query = params.map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+    const joiner = base.includes("?") ? "&" : "?usp=pp_url&";
+    return `${base}${joiner}${query}`;
+  }
 
   async function handleSubmit() {
     if (!name.trim() || !email.trim() || !docName.trim()) {
@@ -417,7 +484,7 @@ export default function SubmitForm({
                 <span>{t("fileTooLargeMessage")}</span>
               </div>
               <a
-                href={t("googleFormUrl")}
+                href={buildPrefilledFormUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -435,6 +502,9 @@ export default function SubmitForm({
                 <i className="ti ti-external-link" style={{ fontSize: 14 }} aria-hidden="true" />
                 {t("fileTooLargeFormButton")}
               </a>
+              <div style={{ marginTop: 6, fontSize: 11, opacity: 0.85 }}>
+                {t("fileTooLargePrefillNote")}
+              </div>
             </div>
           )}
         </div>

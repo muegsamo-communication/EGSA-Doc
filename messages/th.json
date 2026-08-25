@@ -144,8 +144,9 @@
     "emailRegisterLinkLabel": "วิธีลงทะเบียน Google Workspace ของมหาวิทยาลัย",
     "emailRegisterLinkUrl": "https://muit.mahidol.ac.th/docs/users-guide/google-workspace/edu_workspace_reg_2026/",
     "fileTooLargeMessage": "ไฟล์นี้ใหญ่เกิน 3 MB ซึ่งเกินขีดจำกัดของเว็บแอป — ท่านสามารถบีบอัดไฟล์ให้เล็กลงแล้วเลือกใหม่ หรือยื่นผ่าน Google Form ซึ่งรองรับไฟล์ได้ถึง 10 MB",
-    "fileTooLargeFormButton": "ยื่นผ่าน Google Form แทน",
-    "googleFormUrl": "https://forms.gle/fu1UrWLJ6mfLpi7q6"
+    "fileTooLargeFormButton": "ยื่นผ่าน Google Form (กรอกข้อมูลให้แล้ว)",
+    "googleFormUrl": "https://forms.gle/fu1UrWLJ6mfLpi7q6",
+    "fileTooLargePrefillNote": "ข้อมูลที่ท่านกรอกไว้จะถูกเติมให้อัตโนมัติ เหลือแค่แนบไฟล์ ติ๊กยินยอม แล้วกดส่ง"
   },
   "status": {
     "title": "ตรวจสอบสถานะเอกสาร",
