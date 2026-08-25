@@ -233,17 +233,17 @@ export default function SubmitForm({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 5,
+              gap: 6,
               marginTop: 6,
-              padding: "3px 10px",
+              padding: "5px 10px",
               background: colors.tint,
-              borderRadius: 20,
+              borderRadius: 8,
               fontSize: 11,
               color: colors.primaryDark,
-              width: "fit-content",
+              lineHeight: 1.5,
             }}
           >
-            <i className="ti ti-mail" style={{ fontSize: 13 }} aria-hidden="true" />
+            <i className="ti ti-mail" style={{ fontSize: 13, flexShrink: 0 }} aria-hidden="true" />
             {t("emailDomainHint")}
           </div>
           {isLoggedIn &&

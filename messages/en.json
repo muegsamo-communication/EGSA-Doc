@@ -136,7 +136,7 @@
     "docNameHintExample": "Example: BudgetRequest_FreshmanOrientation.pdf",
     "emailMismatchWarning": "This email doesn’t match your logged-in account — this document will only show up under the email entered here, not your current login",
     "emailGoogleHint": "Your email must be a Google account so you can open the document files. If using @student.mahidol.ac.th, you must first register for Google Workspace with the university — it becomes usable the next working day.",
-    "emailDomainHint": "Use a Google account email only: student ID 68 or earlier can use @student.mahidol.edu directly · ID 69 onwards can use @student.mahidol.ac.th after registering with the university · or use a personal Gmail",
+    "emailDomainHint": "Must be a Google account email (Gmail, @student.mahidol.edu, or a registered .ac.th)",
     "pdpaConsentLabel": "I consent to the collection and use of my personal data as described in the",
     "pdpaConsentLink": "Privacy Policy",
     "errNoPdpaConsent": "Please consent to data collection before submitting",
