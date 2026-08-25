@@ -125,6 +125,30 @@ export default function SubmitForm({
             <br />
             <strong style={{ fontSize: 18 }}>{result.trackingId}</strong>
           </p>
+
+          {/* แจ้งระยะเวลาดำเนินการตรงจังหวะที่ผู้ยื่นเริ่มรอจริง ๆ */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 7,
+              marginTop: 12,
+              padding: "9px 12px",
+              background: "#fff",
+              borderRadius: 6,
+              fontSize: 12,
+              color: colors.textSecondary,
+              lineHeight: 1.6,
+            }}
+          >
+            <i
+              className="ti ti-clock"
+              style={{ fontSize: 15, color: colors.primary, marginTop: 1, flexShrink: 0 }}
+              aria-hidden="true"
+            />
+            <span>{t("processingTimeNote")}</span>
+          </div>
+
           <p style={{ color: colors.textSecondary, fontSize: 13, marginTop: 12 }}>
             {t("keepTrackingId")}{" "}
             <a href={`/status?q=${encodeURIComponent(result.trackingId)}`} style={{ color: colors.primary }}>

@@ -91,19 +91,19 @@ export default async function HomePage() {
                 </button>
               </form>
 
-              <p style={{ color: colors.textMuted, fontSize: 11, margin: "0 0 10px" }}>{t("home.orUseWithoutLogin")}</p>
-              <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
+              <p style={{ color: colors.textMuted, fontSize: 11, margin: "0 0 8px" }}>{t("home.orUseWithoutLogin")}</p>
+              <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
                 <a href="/submit" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
-                  <i className="ti ti-file-plus" style={{ fontSize: 16 }} aria-hidden="true" />
+                  <i className="ti ti-file-plus" style={{ fontSize: 14 }} aria-hidden="true" />
                   {t("nav.submit")}
                 </a>
                 <a href="/status" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
-                  <i className="ti ti-search" style={{ fontSize: 16 }} aria-hidden="true" />
+                  <i className="ti ti-search" style={{ fontSize: 14 }} aria-hidden="true" />
                   {t("nav.status")}
                 </a>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 28 }}>
                 {steps.map((step, i) => (
                   <div key={i} style={{ textAlign: "center" }}>
                     <div
@@ -124,22 +124,6 @@ export default async function HomePage() {
                     <div style={{ fontSize: 11, fontWeight: 500 }}>{t(`home.${step.titleKey}`)}</div>
                   </div>
                 ))}
-              </div>
-
-              {/* แจ้งระยะเวลาดำเนินการให้เห็นตั้งแต่หน้าแรก ก่อนตัดสินใจยื่น */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 6,
-                  marginBottom: 28,
-                  fontSize: 11,
-                  color: colors.textMuted,
-                }}
-              >
-                <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
-                {t("home.processingTime")}
               </div>
 
               <div
@@ -185,12 +169,12 @@ export default async function HomePage() {
 
         <style>{`
           .egsa-outline-btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            border: 1.5px solid ${colors.primary}; color: ${colors.primary};
-            border-radius: 8px; padding: 10px 14px; font-size: 13px; font-family: var(--font-body);
-            text-decoration: none; transition: background 0.15s, color 0.15s;
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            border: 1px solid ${colors.cardBorder}; color: ${colors.textSecondary};
+            border-radius: 7px; padding: 7px 10px; font-size: 12px; font-family: var(--font-body);
+            text-decoration: none; transition: border-color 0.15s, color 0.15s;
           }
-          .egsa-outline-btn:hover { background: ${colors.primary}; color: #fff; }
+          .egsa-outline-btn:hover { border-color: ${colors.primary}; color: ${colors.primary}; }
           @media (max-width: 768px) {
             .egsa-home-panels { flex-direction: column; }
             .egsa-home-illustration { min-height: 220px; }
