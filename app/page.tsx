@@ -103,7 +103,7 @@ export default async function HomePage() {
                 </a>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 28 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 12 }}>
                 {steps.map((step, i) => (
                   <div key={i} style={{ textAlign: "center" }}>
                     <div
@@ -124,6 +124,22 @@ export default async function HomePage() {
                     <div style={{ fontSize: 11, fontWeight: 500 }}>{t(`home.${step.titleKey}`)}</div>
                   </div>
                 ))}
+              </div>
+
+              {/* แจ้งระยะเวลาดำเนินการให้เห็นตั้งแต่หน้าแรก ก่อนตัดสินใจยื่น */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  marginBottom: 28,
+                  fontSize: 11,
+                  color: colors.textMuted,
+                }}
+              >
+                <i className="ti ti-clock" style={{ fontSize: 13 }} aria-hidden="true" />
+                {t("home.processingTime")}
               </div>
 
               <div
