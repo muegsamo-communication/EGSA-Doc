@@ -44,6 +44,7 @@ export default function SubmitForm({
   const [pdpaConsent, setPdpaConsent] = useState(false);
   const [honeypot, setHoneypot] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [fileTooLarge, setFileTooLarge] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [status, setStatus] = useState<"idle" | "loading" | "error" | "success">("idle");
@@ -353,7 +354,19 @@ export default function SubmitForm({
             ref={fileRef}
             type="file"
             accept="application/pdf"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            onChange={(e) => {
+              const picked = e.target.files?.[0] || null;
+              // *** เช็คขนาดทันทีที่เลือกไฟล์ ไม่ต้องรออัปโหลดจนสุดแล้วค่อยโดนปฏิเสธ ***
+              const MAX_SIZE = 3 * 1024 * 1024;
+              if (picked && picked.size > MAX_SIZE) {
+                setFile(null);
+                setFileTooLarge(true);
+                if (fileRef.current) fileRef.current.value = "";
+                return;
+              }
+              setFileTooLarge(false);
+              setFile(picked);
+            }}
             style={{ display: "none" }}
           />
           <div
@@ -383,6 +396,47 @@ export default function SubmitForm({
             </span>
           </div>
           <p style={{ fontSize: 11, color: colors.textMuted, margin: "6px 0 0" }}>{t("fileHint")}</p>
+
+          {/* *** ไฟล์ใหญ่เกิน — เสนอทางเลือกยื่นผ่าน Google Form แทน ***
+              Google Form อัปไฟล์เข้า Drive โดยตรง ไม่ผ่าน Vercel จึงรับไฟล์ใหญ่กว่าได้ */}
+          {fileTooLarge && (
+            <div
+              style={{
+                marginTop: 8,
+                padding: "10px 12px",
+                background: "#fff8e1",
+                border: "1px solid #ffe082",
+                borderRadius: 8,
+                fontSize: 12,
+                color: "#8a6d00",
+                lineHeight: 1.6,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 8 }}>
+                <i className="ti ti-alert-triangle" style={{ fontSize: 14, marginTop: 2, flexShrink: 0 }} aria-hidden="true" />
+                <span>{t("fileTooLargeMessage")}</span>
+              </div>
+              <a
+                href={t("googleFormUrl")}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "7px 14px",
+                  background: colors.primary,
+                  color: "#fff",
+                  borderRadius: 7,
+                  textDecoration: "none",
+                  fontSize: 12,
+                }}
+              >
+                <i className="ti ti-external-link" style={{ fontSize: 14 }} aria-hidden="true" />
+                {t("fileTooLargeFormButton")}
+              </a>
+            </div>
+          )}
         </div>
 
         <label style={{ fontSize: 13, display: "flex", alignItems: "flex-start", gap: 6 }}>

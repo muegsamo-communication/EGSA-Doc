@@ -142,7 +142,10 @@
     "errNoPdpaConsent": "กรุณายินยอมให้เก็บข้อมูลส่วนบุคคลก่อนยื่นเอกสาร",
     "processingTimeNote": "โดยปกติใช้เวลาดำเนินการไม่เกิน 3 วันทำการนับจากวันที่ยื่น (รวมขั้นตอนตรวจสอบและเซ็นอนุมัติ)",
     "emailRegisterLinkLabel": "วิธีลงทะเบียน Google Workspace ของมหาวิทยาลัย",
-    "emailRegisterLinkUrl": "https://muit.mahidol.ac.th/docs/users-guide/google-workspace/edu_workspace_reg_2026/"
+    "emailRegisterLinkUrl": "https://muit.mahidol.ac.th/docs/users-guide/google-workspace/edu_workspace_reg_2026/",
+    "fileTooLargeMessage": "ไฟล์นี้ใหญ่เกิน 3 MB ซึ่งเกินขีดจำกัดของเว็บแอป — ท่านสามารถบีบอัดไฟล์ให้เล็กลงแล้วเลือกใหม่ หรือยื่นผ่าน Google Form ซึ่งรองรับไฟล์ได้ถึง 10 MB",
+    "fileTooLargeFormButton": "ยื่นผ่าน Google Form แทน",
+    "googleFormUrl": "https://forms.gle/fu1UrWLJ6mfLpi7q6"
   },
   "status": {
     "title": "ตรวจสอบสถานะเอกสาร",
