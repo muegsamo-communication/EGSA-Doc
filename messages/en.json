@@ -14,8 +14,8 @@
   "home": {
     "orgName": "Student Union Document System",
     "faculty": "EGSA Doc",
-    "loggedOutSubtitle": "Sign in with Google to submit documents, check status, or manage the queue",
-    "orUseWithoutLogin": "Or use without signing in:",
+    "loggedOutSubtitle": "Sign in once and we’ll remember your details — no re-typing every time you submit, plus all your documents in one place",
+    "orUseWithoutLogin": "Prefer not to sign in? You can still use these",
     "welcome": "Welcome,",
     "statPendingReview": "Pending Review",
     "statPendingSign": "Pending Signature",
@@ -96,7 +96,7 @@
   },
   "submit": {
     "title": "Submit Document",
-    "subtitle": "Fill in your details and attach the document (PDF, max 3MB)",
+    "subtitle": "Fill in your details and attach your document (PDF, max 3MB) — processing normally takes no more than 3 working days",
     "resubmitBanner": "Resubmitting a previously rejected document (previous reference: {id})",
     "autofillBanner": "Auto-filled from your most recent submission — please review before sending.",
     "loginHintBanner": "Sign in with Google so the system can auto-fill this next time, and to view all your documents at",
@@ -135,15 +135,18 @@
     "docNameHintInstruction": "Please state the purpose and activity name clearly",
     "docNameHintExample": "Example: BudgetRequest_FreshmanOrientation.pdf",
     "emailMismatchWarning": "This email doesn’t match your logged-in account — this document will only show up under the email entered here, not your current login",
-    "emailGoogleHint": "Please use an email that’s a Google account (e.g. Gmail) so you can open your document and any links — if your university email isn’t a Google account, please use a personal Gmail instead",
-    "emailDomainHint": "Please use a Gmail or university (.edu) email only (.ac.th not supported)",
+    "emailGoogleHint": "Your email must be a Google account so you can open the document files. If using @student.mahidol.ac.th, you must first register for Google Workspace with the university — it becomes usable the next working day.",
+    "emailDomainHint": "Use a Google account email only: student ID 68 or earlier can use @student.mahidol.edu directly · ID 69 onwards can use @student.mahidol.ac.th after registering with the university · or use a personal Gmail",
     "pdpaConsentLabel": "I consent to the collection and use of my personal data as described in the",
     "pdpaConsentLink": "Privacy Policy",
-    "errNoPdpaConsent": "Please consent to data collection before submitting"
+    "errNoPdpaConsent": "Please consent to data collection before submitting",
+    "processingTimeNote": "Processing normally takes no more than 3 working days from submission (covering both review and approval)",
+    "emailRegisterLinkLabel": "How to register for the university’s Google Workspace",
+    "emailRegisterLinkUrl": "https://muit.mahidol.ac.th/docs/users-guide/google-workspace/edu_workspace_reg_2026/"
   },
   "status": {
     "title": "Check Document Status",
-    "subtitle": "Enter a tracking ID or the email used to submit",
+    "subtitle": "Enter your Tracking ID or the email you submitted with — processing normally takes no more than 3 working days",
     "sessionDefaultBanner": "Showing documents submitted with {email} — search below to look up something else",
     "searchPlaceholder": "Tracking ID",
     "searchButton": "Search",
@@ -318,7 +321,7 @@
     "title": "Frequently Asked Questions",
     "subtitle": "For applicants",
     "q1": "I submitted a document — how long until it’s processed?",
-    "a1": "There’s no fixed timeframe — it depends on how quickly the secretary reviews it and the president signs it. You’ll get an email every time the status changes",
+    "a1": "Normally no more than 3 working days from the date you submit, covering both the secretary’s review and the president’s approval. You’ll get an email whenever the status changes, and you can check the status yourself anytime on the status page.",
     "q2": "I forgot my Tracking ID — what do I do?",
     "a2": "Search by the email you used to submit instead, on the \"Check Status\" page. If you’ve signed in with Google before, you can also see everything on \"My Documents\"",
     "q3": "My document was rejected — what does that mean and what do I do?",
@@ -329,8 +332,8 @@
     "a5": "You’ll get an email immediately with a link to the signed, numbered document. You can also view it anytime on \"Check Status\" or \"My Documents\"",
     "q6": "I made a typo after submitting — can I fix it?",
     "a6": "You can’t edit it yourself once submitted — please contact the secretary directly for help",
-    "q7": "Why do I need Gmail? Can I use my university email (.ac.th)?",
-    "a7": "Documents are shared through Google Drive, which only opens for a Google account. If your university email runs on Microsoft/Outlook (not Google), the file link won’t open. Please use a personal Gmail address when submitting instead — no need to link it to your university email at all"
+    "q7": "Can I use my university email (.ac.th) to submit?",
+    "a7": "Yes, but it must be a Google account, since the system uses Google permissions to grant file access. Students with ID 68 or earlier can use @student.mahidol.edu right away. Students with ID 69 onwards using @student.mahidol.ac.th must first register for Google Workspace with the university, and it becomes usable the next working day (see the IT Division website for registration steps). If you haven’t registered yet or need to submit immediately, use a personal Gmail instead."
   },
   "privacy": {
     "navLabel": "Privacy Policy",
