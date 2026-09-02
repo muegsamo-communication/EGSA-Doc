@@ -146,7 +146,9 @@
     "fileTooLargeMessage": "ไฟล์นี้ใหญ่เกิน 3 MB ซึ่งเกินขีดจำกัดของเว็บแอป — ท่านสามารถบีบอัดไฟล์ให้เล็กลงแล้วเลือกใหม่ หรือยื่นผ่าน Google Form ซึ่งรองรับไฟล์ได้ถึง 10 MB",
     "fileTooLargeFormButton": "ยื่นผ่าน Google Form (กรอกข้อมูลให้แล้ว)",
     "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdUWRmrhl2948PwY_1WsOmAKL7Gr3ArFrGqPtoG4mn76MCWvA/viewform",
-    "fileTooLargePrefillNote": "ข้อมูลที่ท่านกรอกไว้จะถูกเติมให้อัตโนมัติ เหลือแค่แนบไฟล์ ติ๊กยินยอม แล้วกดส่ง"
+    "fileTooLargePrefillNote": "ข้อมูลที่ท่านกรอกไว้จะถูกเติมให้อัตโนมัติ เหลือแค่แนบไฟล์ ติ๊กยินยอม แล้วกดส่ง",
+    "agencyOther": "อื่น ๆ - Other",
+    "agencyOtherPlaceholder": "ระบุชื่อหน่วยงานของท่าน"
   },
   "status": {
     "title": "ตรวจสอบสถานะเอกสาร",

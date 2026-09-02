@@ -5,11 +5,16 @@ import { useTranslations } from "next-intl";
 import type { AgencyOptions } from "@/lib/agencies";
 import { colors, inputStyle, buttonPrimaryStyle } from "@/lib/theme";
 
+// sheetKey = null หมายถึงหมวด "อื่น ๆ" ที่ให้พิมพ์ชื่อหน่วยงานเอง ไม่มีรายการให้เลือก
 const AGENCY_TYPES = [
   { value: "สโมสรนักศึกษา- Student Association", labelKey: "agencyStudentUnion", sheetKey: "ฝ่ายภายในสโมสร" as const },
   { value: "ชมรม - Student Club", labelKey: "agencyClub", sheetKey: "ชมรม" as const },
   { value: "ภาควิชา - Department", labelKey: "agencyDepartment", sheetKey: "ภาควิชา" as const },
+  { value: "อื่น ๆ - Other", labelKey: "agencyOther", sheetKey: null },
 ];
+
+// ค่าที่ใช้ระบุว่าเลือกหมวด "อื่น ๆ" — ใช้ร่วมกันทั้งฝั่งเว็บแอปและ Apps Script
+const AGENCY_OTHER_VALUE = "อื่น ๆ - Other";
 
 // ---- Entry ID ของแต่ละช่องในฟอร์มยื่นเอกสาร (Google Form) ----
 // ใช้สร้างลิงก์ที่กรอกข้อมูลไว้ล่วงหน้า ตอนไฟล์ใหญ่เกินขีดจำกัดของเว็บแอป
@@ -78,7 +83,8 @@ export default function SubmitForm({
   const [result, setResult] = useState<{ trackingId: string; docName: string } | null>(null);
 
   const selectedAgency = AGENCY_TYPES.find((a) => a.value === agencyType);
-  const valueOptions = selectedAgency ? agencyOptions[selectedAgency.sheetKey] : [];
+  const valueOptions = selectedAgency?.sheetKey ? agencyOptions[selectedAgency.sheetKey] : [];
+  const isOtherAgency = agencyType === AGENCY_OTHER_VALUE;
 
   /**
    * สร้างลิงก์ Google Form ที่กรอกข้อมูลที่ผู้ใช้พิมพ์ไว้แล้วให้ล่วงหน้า
@@ -105,13 +111,20 @@ export default function SubmitForm({
     add(FORM_ENTRY.prevTrackingId, previousTrackingId);
 
     if (agencyType) {
-      add(FORM_ENTRY.agencyType, AGENCY_TYPE_FORM_VALUE[agencyType] || agencyType);
+      if (isOtherAgency) {
+        // *** หมวด "อื่น ๆ" ใช้ Option Other ของ Google Form ***
+        // ต้องใช้ไวยากรณ์พิเศษ 2 บรรทัด: ตัวเลือกเป็น __other_option__ แล้วส่งข้อความจริงแยกอีกพารามิเตอร์
+        add(FORM_ENTRY.agencyType, "__other_option__");
+        add(`${FORM_ENTRY.agencyType}.other_option_response`, agencyValue);
+      } else {
+        add(FORM_ENTRY.agencyType, AGENCY_TYPE_FORM_VALUE[agencyType] || agencyType);
 
-      // *** ใส่เฉพาะช่องหน่วยงานย่อยที่ตรงกับประเภทที่เลือกเท่านั้น ***
-      // ฟอร์มใช้ "Go to section based on answer" — ถ้าใส่ทั้งสามช่องพร้อมกันจะพาไปหน้าผิด
-      if (selectedAgency?.sheetKey === "ฝ่ายภายในสโมสร") add(FORM_ENTRY.division, agencyValue);
-      else if (selectedAgency?.sheetKey === "ชมรม") add(FORM_ENTRY.club, agencyValue);
-      else if (selectedAgency?.sheetKey === "ภาควิชา") add(FORM_ENTRY.dept, agencyValue);
+        // *** ใส่เฉพาะช่องหน่วยงานย่อยที่ตรงกับประเภทที่เลือกเท่านั้น ***
+        // ฟอร์มใช้ "Go to section based on answer" — ถ้าใส่ทั้งสามช่องพร้อมกันจะพาไปหน้าผิด
+        if (selectedAgency?.sheetKey === "ฝ่ายภายในสโมสร") add(FORM_ENTRY.division, agencyValue);
+        else if (selectedAgency?.sheetKey === "ชมรม") add(FORM_ENTRY.club, agencyValue);
+        else if (selectedAgency?.sheetKey === "ภาควิชา") add(FORM_ENTRY.dept, agencyValue);
+      }
     }
 
     if (params.length === 0) return base;
@@ -387,7 +400,16 @@ export default function SubmitForm({
           ))}
         </div>
 
-        {selectedAgency && (
+        {isOtherAgency && (
+          <input
+            placeholder={t("agencyOtherPlaceholder")}
+            value={agencyValue}
+            onChange={(e) => setAgencyValue(e.target.value)}
+            style={{ ...inputStyle, boxSizing: "border-box" }}
+          />
+        )}
+
+        {selectedAgency?.sheetKey && (
           <select
             value={agencyValue}
             onChange={(e) => setAgencyValue(e.target.value)}
