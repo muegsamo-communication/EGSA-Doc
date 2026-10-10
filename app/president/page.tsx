@@ -36,6 +36,8 @@ export default async function PresidentPage() {
         submittedAt: cell(data.headers, row, "ประทับเวลา"),
         reviewer: cell(data.headers, row, "ผู้ตรวจสอบ"),
         fileUrl: cell(data.headers, row, "เอกสารที่ต้องการยื่น"),
+        approveFormUrl: cell(data.headers, row, "ลิงก์อนุมัติ"),
+        rejectFormUrl: cell(data.headers, row, "ลิงก์ตีกลับ"),
       }));
   } catch (e) {
     error = e instanceof Error ? e.message : "Unknown error";

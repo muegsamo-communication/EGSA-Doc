@@ -4,6 +4,7 @@ import { useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { colors, statusColors } from "@/lib/theme";
+import { fallbackFormUrl } from "@/lib/formLinks";
 
 export type QueueDoc = {
   trackingId: string;
@@ -14,6 +15,8 @@ export type QueueDoc = {
   submittedAt: string;
   reviewer: string;
   fileUrl: string;
+  approveFormUrl?: string;
+  rejectFormUrl?: string;
 };
 
 type ActionKind = "advance" | "reject" | "approve";
@@ -293,6 +296,7 @@ function ActionModal({
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [tooLarge, setTooLarge] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const showFilePicker = action === "reject" || action === "approve";
@@ -445,11 +449,14 @@ function ActionModal({
                 accept="application/pdf"
                 onChange={(e) => {
                   const picked = e.target.files?.[0] || null;
+                  setTooLarge(false);
                   if (picked) {
                     const MAX_SIZE = 3 * 1024 * 1024;
                     if (picked.size > MAX_SIZE) {
                       setFile(null);
-                      fail(t("fileTooLarge"));
+                      setTooLarge(true);
+                      setStatus("idle");
+                      setErrorMsg("");
                       if (fileRef.current) fileRef.current.value = "";
                       return;
                     }
@@ -494,6 +501,59 @@ function ActionModal({
               </div>
             </>
           )}
+
+
+          {tooLarge && (action === "approve" || action === "reject") && (() => {
+            const formUrl = fallbackFormUrl(
+              action,
+              {
+                trackingId: doc.trackingId,
+                reason: action === "reject" ? reason : undefined,
+                person: actingAs?.roleLabel,
+              },
+              action === "approve" ? doc.approveFormUrl : doc.rejectFormUrl
+            );
+            return (
+              <div
+                style={{
+                  background: "#fff8e1",
+                  border: "1px solid #f0d58c",
+                  borderRadius: 8,
+                  padding: "10px 12px",
+                  margin: "0 0 14px",
+                  fontSize: 13,
+                  color: "#6b5200",
+                }}
+              >
+                <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                  <i className="ti ti-alert-triangle" style={{ fontSize: 16, marginTop: 1 }} aria-hidden="true" />
+                  <span>{formUrl ? t("tooLargeUseForm") : t("tooLargeNoForm")}</span>
+                </div>
+                {formUrl && (
+                  <a
+                    href={formUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      marginTop: 10,
+                      padding: "8px 14px",
+                      background: colors.primary,
+                      color: "#fff",
+                      borderRadius: 8,
+                      textDecoration: "none",
+                      fontSize: 13,
+                    }}
+                  >
+                    <i className="ti ti-external-link" aria-hidden="true" />
+                    {action === "approve" ? t("tooLargeApproveButton") : t("tooLargeRejectButton")}
+                  </a>
+                )}
+              </div>
+            );
+          })()}
 
           <p style={{ fontSize: 12, color: colors.textMuted, margin: "0 0 16px" }}>{noteText}</p>
 

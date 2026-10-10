@@ -92,7 +92,11 @@
     "actingAs": "Acting as",
     "fileTooLarge": "File too large — please choose a PDF 3MB or smaller",
     "fileMustBePdf": "PDF files only",
-    "fileHint": "PDF only, 3MB maximum"
+    "fileHint": "PDF only, 3MB maximum",
+    "tooLargeUseForm": "This file is over 3 MB, which exceeds the web app limit. Send it via Google Form instead (up to 10 MB) — what you've entered here will be filled in for you; just attach the file and submit. The result is the same as using the web app.",
+    "tooLargeNoForm": "This file is over 3 MB, which exceeds the web app limit. Please compress it and choose it again.",
+    "tooLargeApproveButton": "Send signed file via Google Form",
+    "tooLargeRejectButton": "Reject via Google Form"
   },
   "submit": {
     "title": "Submit Document",

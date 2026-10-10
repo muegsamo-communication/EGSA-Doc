@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { checkSubmitRateLimit } from "@/lib/rateLimit";
+import { parseAppsScriptResponse } from "@/lib/appsScript";
 
 export async function POST(req: Request) {
   const formData = await req.formData();
@@ -93,12 +94,7 @@ export async function POST(req: Request) {
       }),
     });
     const raw = await res.text();
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      data = { success: false, error: "Unexpected response from Apps Script: " + raw };
-    }
+    const data = parseAppsScriptResponse(raw);
     return NextResponse.json(data);
   } catch (e) {
     return NextResponse.json(
