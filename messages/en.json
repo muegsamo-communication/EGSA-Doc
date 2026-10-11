@@ -44,7 +44,8 @@
     "connectionError": "Connection failed",
     "cancel": "Cancel",
     "loading": "Processing...",
-    "required": "Required"
+    "required": "Required",
+    "filePreparing": "Preparing the file — it will open within 1–2 minutes (this page updates itself)"
   },
   "queue": {
     "secretaryTitle": "Pending Review",
@@ -157,7 +158,8 @@
     "sendingBody": "\"{docName}\" is being sent. This usually takes a few seconds to half a minute — your reference ID will appear here when it's done.",
     "sendingHint": "You can move to other pages on this site meanwhile; a notice will pop up in the corner when it's done. Just don't close or refresh this tab until then.",
     "sendingGoHome": "Back to home",
-    "errGeneric": "Sending failed, please try again"
+    "errGeneric": "Sending failed, please try again",
+    "confirmEmailNote": "A confirmation email will arrive within a few minutes — no need to submit again. You can check the status right away with the reference ID above."
   },
   "status": {
     "title": "Check Document Status",
@@ -405,6 +407,7 @@
     "close": "Close",
     "genericError": "Something went wrong, please try again",
     "networkError": "Couldn't connect — check your internet and try again",
-    "inProgress": "In progress…"
+    "inProgress": "In progress…",
+    "emailSoon": "A confirmation email will follow within a few minutes"
   }
 }

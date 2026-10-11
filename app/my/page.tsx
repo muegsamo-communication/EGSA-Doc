@@ -61,6 +61,7 @@ export default async function MyPage() {
         fileUrl: cell(data.headers, row, "เอกสารที่ต้องการยื่น"),
         finalFileUrl: cell(data.headers, row, "ลิงก์ไฟล์สุดท้าย (ประทับเลขแล้ว)"),
         resubmitLink: cell(data.headers, row, "ลิงก์ฟอร์มส่งเอกสารแก้"),
+        sharePending: !!cell(data.headers, row, "รอแชร์ไฟล์").trim(),
       }));
   } catch (e) {
     error = e instanceof Error ? e.message : "Unknown error";

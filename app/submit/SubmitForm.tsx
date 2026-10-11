@@ -18,6 +18,25 @@ const AGENCY_TYPES = [
 // ค่าที่ใช้ระบุว่าเลือกหมวด "อื่น ๆ" — ใช้ร่วมกันทั้งฝั่งเว็บแอปและ Apps Script
 const AGENCY_OTHER_VALUE = "อื่น ๆ - Other";
 
+/**
+ * แปลงค่าหน่วยงานที่มากับลิงก์ยื่นแก้ไข ให้ตรงกับตัวเลือกของเว็บแอป
+ *
+ * เอกสารที่ยื่นผ่าน Google Form เก็บค่าแบบฟอร์ม เช่น "สโมสรนักศึกษา - Student Association" (มีเว้นวรรค)
+ * ซึ่งไม่ตรงกับค่าของเว็บแอป ("สโมสรนักศึกษา- Student Association") จึงเทียบแบบไม่สนเว้นวรรค
+ * ถ้าไม่ตรงตัวเลือกไหนเลย แปลว่าเป็นชื่อที่ผู้ยื่นพิมพ์เองในช่อง "อื่น ๆ" ของฟอร์ม (ข้อมูลเก่า)
+ */
+function normalizeInitialAgency(rawType: string, rawValue: string): { type: string; value: string } {
+  const type = (rawType || "").trim();
+  const value = (rawValue || "").trim();
+  if (!type) return { type: "", value };
+  const key = type.replace(/\s+/g, "");
+  const match = AGENCY_TYPES.find((a) => a.value.replace(/\s+/g, "") === key);
+  if (match) return { type: match.value, value };
+  // ข้อมูลเก่าจาก Google Form: ชื่อหน่วยงานที่พิมพ์เองอยู่ในช่องประเภทหน่วยงาน
+  const usableValue = value && value !== "ไม่ระบุหน่วยงาน" ? value : type;
+  return { type: AGENCY_OTHER_VALUE, value: usableValue };
+}
+
 // ---- Entry ID ของแต่ละช่องในฟอร์มยื่นเอกสาร (Google Form) ----
 // ใช้สร้างลิงก์ที่กรอกข้อมูลไว้ล่วงหน้า ตอนไฟล์ใหญ่เกินขีดจำกัดของเว็บแอป
 // *** ถ้าสร้างฟอร์มใหม่ Entry ID จะเปลี่ยนทั้งหมด ต้องหามาใส่ใหม่ (ดูวิธีในคู่มือส่วนที่ 19.5) ***
@@ -70,8 +89,9 @@ export default function SubmitForm({
   const [email, setEmail] = useState(initialValues?.email || "");
   const [phone, setPhone] = useState(initialValues?.phone || "");
   const [docName, setDocName] = useState(initialValues?.docName || "");
-  const [agencyType, setAgencyType] = useState(initialValues?.agencyType || "");
-  const [agencyValue, setAgencyValue] = useState(initialValues?.agencyValue || "");
+  const initialAgency = normalizeInitialAgency(initialValues?.agencyType || "", initialValues?.agencyValue || "");
+  const [agencyType, setAgencyType] = useState(initialAgency.type);
+  const [agencyValue, setAgencyValue] = useState(initialAgency.value);
   const [previousTrackingId, setPreviousTrackingId] = useState(initialValues?.previousTrackingId || "");
   const [acknowledged, setAcknowledged] = useState(false);
   const [pdpaConsent, setPdpaConsent] = useState(false);
@@ -275,6 +295,11 @@ export default function SubmitForm({
             />
             <span>{t("processingTimeNote")}</span>
           </div>
+
+          {/* อีเมลยืนยันส่งจากคิวเบื้องหลัง อาจมาช้ากว่าหน้านี้ 1–2 นาที — บอกไว้กันคนยื่นซ้ำ */}
+          <p style={{ fontSize: 12, color: colors.textSecondary, margin: "10px 0 0", lineHeight: 1.6 }}>
+            {t("confirmEmailNote")}
+          </p>
 
           <p style={{ color: colors.textSecondary, fontSize: 13, marginTop: 12 }}>
             {t("keepTrackingId")}{" "}

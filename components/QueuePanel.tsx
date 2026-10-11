@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { colors, statusColors } from "@/lib/theme";
+import AutoRefresh from "@/components/AutoRefresh";
 import { fallbackFormUrl } from "@/lib/formLinks";
 import { useSendQueue, type SendRequest } from "@/components/SendQueue";
 
@@ -16,6 +17,8 @@ export type QueueDoc = {
   reviewer: string;
   fileUrl: string;
   approveFormUrl?: string;
+  /** คิวเบื้องหลังยังแชร์ไฟล์ไม่เสร็จ — ซ่อนลิงก์เปิดไฟล์ไว้ก่อน */
+  sharePending?: boolean;
   rejectFormUrl?: string;
 };
 
@@ -33,6 +36,7 @@ export default function QueuePanel({
 }) {
   const t = useTranslations("queue");
   const tsq = useTranslations("sendQueue");
+  const tcommon = useTranslations("common");
   const { jobs, enqueue } = useSendQueue();
   // เอกสารที่กำลังส่งคำสั่งอยู่เบื้องหลัง — ซ่อนปุ่มไว้กันกดซ้ำ
   const busyIds = useMemo(
@@ -73,6 +77,8 @@ export default function QueuePanel({
 
   return (
     <div>
+      {docs.some((d) => d.sharePending) && <AutoRefresh />}
+
       {actingAs && (
         <div
           style={{
@@ -218,7 +224,13 @@ export default function QueuePanel({
                         />
                         {t("attachedFile")}
                       </button>
-                      {expandedFiles.has(doc.trackingId) && (
+                      {expandedFiles.has(doc.trackingId) && doc.sharePending && (
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: colors.textSecondary }}>
+                          <i className="ti ti-hourglass" style={{ fontSize: 15 }} aria-hidden="true" />
+                          {tcommon("filePreparing")}
+                        </span>
+                      )}
+                      {expandedFiles.has(doc.trackingId) && !doc.sharePending && (
                         <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="egsa-link-btn">
                           <i className="ti ti-file-text" style={{ fontSize: 16 }} aria-hidden="true" />
                           {t("openDocument")}

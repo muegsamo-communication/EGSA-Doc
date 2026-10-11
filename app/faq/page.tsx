@@ -13,24 +13,12 @@ export default async function FaqPage() {
   // เดิมเขียนตายตัวไว้แค่ q1-q6 ทำให้คำถามข้อ 7 ที่เพิ่มในไฟล์ภาษาไม่เคยแสดงบนหน้าเว็บเลย
   // ตอนนี้ถ้าเพิ่ม q8/a8 ในไฟล์ภาษา จะขึ้นเองทันทีโดยไม่ต้องกลับมาแก้ไฟล์นี้
   const items: { q: string; a: string }[] = [];
+  // ใช้ t.has() เช็คก่อนว่ามีข้อความไหม — เดิมใช้ try/catch ซึ่ง next-intl จะพิมพ์ error
+  // "MISSING_MESSAGE" ลง log ของเซิร์ฟเวอร์ทุกครั้งที่เปิดหน้านี้ (ตอนลองหาข้อถัดจากข้อสุดท้าย)
   for (let i = 1; i <= MAX_FAQ_ITEMS; i++) {
-    let question: string;
-    try {
-      question = t(`q${i}`);
-    } catch {
-      break; // ไม่มีคำถามข้อนี้แล้ว หยุดนับ
-    }
-    // next-intl คืนค่าเป็นชื่อคีย์เองถ้าหาข้อความไม่เจอ — เช็คกันกรณีนั้นด้วย
-    if (!question || question === `q${i}` || question === `faq.q${i}`) break;
-
-    let answer = "";
-    try {
-      answer = t(`a${i}`);
-      if (answer === `a${i}` || answer === `faq.a${i}`) answer = "";
-    } catch {
-      answer = "";
-    }
-
+    if (!t.has(`q${i}`)) break; // ไม่มีคำถามข้อนี้แล้ว หยุดนับ
+    const question = t(`q${i}`);
+    const answer = t.has(`a${i}`) ? t(`a${i}`) : "";
     items.push({ q: question, a: answer });
   }
 

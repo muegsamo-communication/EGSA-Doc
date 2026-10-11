@@ -447,6 +447,7 @@ function Toast({
           {submittedId && (
             <div style={{ marginTop: 4, color: colors.textSecondary }}>
               {t("trackingIdLabel")}: <strong style={{ color: colors.primaryDark }}>{submittedId}</strong>
+              <div style={{ fontSize: 12 }}>{t("emailSoon")}</div>
             </div>
           )}
           {job.warning && <div style={{ marginTop: 6 }}>{job.warning}</div>}
