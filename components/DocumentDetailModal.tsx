@@ -28,7 +28,16 @@ export const STATUS_META: Record<string, { key: string; color: string; bg: strin
   "ตีกลับ": { key: "statusRejected", color: colors.primaryDark, bg: colors.tint },
 };
 
-export default function DocumentDetailModal({ doc, onClose }: { doc: DetailDoc; onClose: () => void }) {
+export default function DocumentDetailModal({
+  doc,
+  onClose,
+  finalFileIsSigned = false,
+}: {
+  doc: DetailDoc;
+  onClose: () => void;
+  /** true = ลิงก์ไฟล์สุดท้ายคือ "ฉบับเซ็นแล้ว" (หน้าเอกสารของฉัน), false = ฉบับประทับเลข (ฐานข้อมูลเอกสารของเจ้าหน้าที่) */
+  finalFileIsSigned?: boolean;
+}) {
   const t = useTranslations("my");
   const ts = useTranslations("status");
   const tcommon = useTranslations("common");
@@ -169,7 +178,7 @@ export default function DocumentDetailModal({ doc, onClose }: { doc: DetailDoc; 
             {isApproved && doc.finalFileUrl && !doc.sharePending && (
               <a href={doc.finalFileUrl} target="_blank" rel="noopener noreferrer" className="egsa-link-btn">
                 <i className="ti ti-file-check" style={{ fontSize: 16 }} aria-hidden="true" />
-                {t("viewFinalFile")}
+                {finalFileIsSigned ? t("viewSignedFile") : t("viewFinalFile")}
               </a>
             )}
             {isRejected && doc.resubmitLink && (

@@ -68,7 +68,7 @@ export default function MyDocumentsList({ docs }: { docs: MyDoc[] }) {
         })}
       </div>
 
-      {selectedDoc && <DocumentDetailModal doc={selectedDoc} onClose={() => setSelected(null)} />}
+      {selectedDoc && <DocumentDetailModal doc={selectedDoc} onClose={() => setSelected(null)} finalFileIsSigned />}
     </>
   );
 }

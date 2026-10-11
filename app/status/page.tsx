@@ -184,7 +184,9 @@ export default async function StatusPage({
         const rejectReason = getCell(headers, row, "เหตุผลตีกลับ");
         const resubmitLink = getCell(headers, row, "ลิงก์ฟอร์มส่งเอกสารแก้");
         const docNumber = getCell(headers, row, "เลขเอกสาร");
-        const finalLink = getCell(headers, row, "ลิงก์ไฟล์สุดท้าย (ประทับเลขแล้ว)");
+        // *** ผู้ยื่นได้ "ฉบับเซ็นแล้ว" (ฉบับเดียวกับในอีเมลแจ้งอนุมัติ) ***
+        // ฉบับประทับเลขเป็นฉบับทดลองระบบประทับ ใช้งานจริงไม่ได้ จึงไม่แสดงในหน้านี้
+        const finalLink = getCell(headers, row, "เอกสารเซ็นอนุมัติแล้ว");
         const approvedAt = getCell(headers, row, "เวลาที่อนุมัติ");
         const rowEmail = getCell(headers, row, "อีเมล").trim().toLowerCase();
         const canViewFile = isStaffViewer || (viewerEmail && viewerEmail === rowEmail);
