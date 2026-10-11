@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { colors } from "@/lib/theme";
+import Link from "next/link";
 
 export default async function Footer() {
   const t = await getTranslations("support");
@@ -19,9 +20,9 @@ export default async function Footer() {
         {t("contactEmail")}
       </a>
       <span style={{ margin: "0 8px" }}>·</span>
-      <a href="/privacy" style={{ color: colors.textMuted, textDecoration: "underline" }}>
+      <Link href="/privacy" style={{ color: colors.textMuted, textDecoration: "underline" }}>
         {tp("navLabel")}
-      </a>
+      </Link>
     </div>
   );
 }

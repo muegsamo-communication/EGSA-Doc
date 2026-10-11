@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { colors, statusColors } from "@/lib/theme";
 import { fallbackFormUrl } from "@/lib/formLinks";
+import { useSendQueue, type SendRequest } from "@/components/SendQueue";
 
 export type QueueDoc = {
   trackingId: string;
@@ -32,11 +32,15 @@ export default function QueuePanel({
   actingAs: ActingAs;
 }) {
   const t = useTranslations("queue");
-  const router = useRouter();
+  const tsq = useTranslations("sendQueue");
+  const { jobs, enqueue } = useSendQueue();
+  // เอกสารที่กำลังส่งคำสั่งอยู่เบื้องหลัง — ซ่อนปุ่มไว้กันกดซ้ำ
+  const busyIds = useMemo(
+    () => new Set(jobs.filter((j) => j.status === "sending" && j.trackingId).map((j) => j.trackingId as string)),
+    [jobs]
+  );
   const [search, setSearch] = useState("");
   const [agencyFilter, setAgencyFilter] = useState("");
-  const [flashId, setFlashId] = useState<string | null>(null);
-  const [flashWarning, setFlashWarning] = useState<string | null>(null);
   const [modal, setModal] = useState<{ doc: QueueDoc; action: ActionKind } | null>(null);
   const [expandedFiles, setExpandedFiles] = useState<Set<string>>(new Set());
 
@@ -154,32 +158,20 @@ export default function QueuePanel({
         {filtered.map((doc) => {
           const pendingKey = mode === "secretary" ? "รอตรวจสอบ" : "รอเซ็น";
           const pending = statusColors[pendingKey];
-          const flashing = flashId === doc.trackingId;
+          const busy = busyIds.has(doc.trackingId);
           return (
             <div
               key={doc.trackingId}
               style={{
-                background: flashing ? (flashWarning ? "#fff8e1" : "#f1f8f1") : "#fff",
-                border: `1px solid ${flashing ? (flashWarning ? "#ffe082" : "#cde5cf") : colors.cardBorder}`,
+                background: "#fff",
+                border: `1px solid ${colors.cardBorder}`,
                 borderLeft: `4px solid ${colors.primary}`,
                 borderRadius: "0 12px 12px 0",
                 padding: 16,
                 transition: "background 0.3s",
               }}
             >
-              {flashing ? (
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "8px 0" }}>
-                  <i
-                    className={`ti ${flashWarning ? "ti-alert-triangle" : "ti-circle-check"}`}
-                    style={{ fontSize: 20, color: flashWarning ? "#8a4b00" : "#1b5e20", flexShrink: 0, marginTop: 1 }}
-                    aria-hidden="true"
-                  />
-                  <span style={{ fontSize: 14, color: flashWarning ? "#8a4b00" : "#1b5e20" }}>
-                    {flashWarning || t("actionSuccess")}
-                  </span>
-                </div>
-              ) : (
-                <>
+              <>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                     <strong style={{ fontSize: 15 }}>{doc.docName || doc.trackingId}</strong>
                     <span
@@ -235,6 +227,21 @@ export default function QueuePanel({
                     </div>
                   )}
 
+                  {busy ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginTop: 12,
+                        fontSize: 13,
+                        color: colors.textSecondary,
+                      }}
+                    >
+                      <span className="egsa-spinner egsa-spinner-dark" aria-hidden="true" />
+                      {tsq("inProgress")}
+                    </div>
+                  ) : (
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
                     {mode === "secretary" ? (
                       <>
@@ -251,8 +258,8 @@ export default function QueuePanel({
                       </button>
                     )}
                   </div>
+                  )}
                 </>
-              )}
             </div>
           );
         })}
@@ -264,12 +271,14 @@ export default function QueuePanel({
           action={modal.action}
           actingAs={actingAs}
           onClose={() => setModal(null)}
-          onSuccess={(warning) => {
-            const id = modal.doc.trackingId;
+          onSubmit={(request) => {
+            enqueue({
+              kind: modal.action,
+              label: modal.doc.docName || modal.doc.trackingId,
+              trackingId: modal.doc.trackingId,
+              request,
+            });
             setModal(null);
-            setFlashId(id);
-            setFlashWarning(warning || null);
-            setTimeout(() => router.refresh(), warning ? 2200 : 700);
           }}
         />
       )}
@@ -282,13 +291,14 @@ function ActionModal({
   action,
   actingAs,
   onClose,
-  onSuccess,
+  onSubmit,
 }: {
   doc: QueueDoc;
   action: ActionKind;
   actingAs: ActingAs;
   onClose: () => void;
-  onSuccess: (warning?: string) => void;
+  /** ส่งคำสั่งเข้าคิวเบื้องหลัง (components/SendQueue.tsx) แล้วปิดหน้าต่างทันที ไม่ต้องรอผล */
+  onSubmit: (request: SendRequest) => void;
 }) {
   const t = useTranslations("queue");
   const tc = useTranslations("common");
@@ -314,48 +324,23 @@ function ActionModal({
     setStatus("error");
   }
 
-  async function handleConfirm() {
+  function handleConfirm() {
     if (needsReason && !reason.trim()) return fail(t("pleaseEnterReason"));
     if (requiresFile && !file) return fail(t("pleaseAttachFile"));
 
-    setStatus("loading");
-    setErrorMsg("");
-
-    try {
-      let res: Response;
-      if (action === "advance") {
-        res = await fetch("/api/advance", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ trackingId: doc.trackingId }),
-        });
-      } else if (action === "reject") {
-        const fd = new FormData();
-        fd.append("trackingId", doc.trackingId);
-        fd.append("reason", reason.trim());
-        if (file) fd.append("file", file);
-        res = await fetch("/api/reject", { method: "POST", body: fd });
-      } else {
-        const fd = new FormData();
-        fd.append("trackingId", doc.trackingId);
-        fd.append("file", file!);
-        res = await fetch("/api/approve", { method: "POST", body: fd });
-      }
-      const data = await res.json();
-      if (!data.success) return fail(data.error || t("genericError"));
-
-      if (data.data?.emailSent === false) {
-        const warningKey =
-          action === "advance" ? "advanceEmailWarning" :
-          action === "reject" ? "rejectEmailWarning" :
-          "approveEmailWarning";
-        onSuccess(t(warningKey));
-        return;
-      }
-
-      onSuccess();
-    } catch (e) {
-      fail(e instanceof Error ? e.message : t("genericError"));
+    if (action === "advance") {
+      onSubmit({ endpoint: "/api/advance", body: { trackingId: doc.trackingId } });
+    } else if (action === "reject") {
+      const fd = new FormData();
+      fd.append("trackingId", doc.trackingId);
+      fd.append("reason", reason.trim());
+      if (file) fd.append("file", file);
+      onSubmit({ endpoint: "/api/reject", body: fd });
+    } else {
+      const fd = new FormData();
+      fd.append("trackingId", doc.trackingId);
+      fd.append("file", file!);
+      onSubmit({ endpoint: "/api/approve", body: fd });
     }
   }
 

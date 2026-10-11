@@ -5,6 +5,7 @@ import { getSecretarySheet } from "@/lib/googleSheets";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { colors, heroStyle, cardStyle } from "@/lib/theme";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -93,14 +94,14 @@ export default async function HomePage() {
 
               <p style={{ color: colors.textMuted, fontSize: 11, margin: "0 0 8px" }}>{t("home.orUseWithoutLogin")}</p>
               <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
-                <a href="/submit" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
+                <Link href="/submit" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
                   <i className="ti ti-file-plus" style={{ fontSize: 14 }} aria-hidden="true" />
                   {t("nav.submit")}
-                </a>
-                <a href="/status" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
+                </Link>
+                <Link href="/status" className="egsa-outline-btn" style={{ flex: 1, textAlign: "center" }}>
                   <i className="ti ti-search" style={{ fontSize: 14 }} aria-hidden="true" />
                   {t("nav.status")}
-                </a>
+                </Link>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 28 }}>
@@ -133,7 +134,7 @@ export default async function HomePage() {
                   borderTop: `1px solid ${colors.cardBorder}`,
                 }}
               >
-                <a
+                <Link
                   href="/faq"
                   style={{
                     display: "inline-flex",
@@ -145,7 +146,7 @@ export default async function HomePage() {
                 >
                   <i className="ti ti-message-circle-question" style={{ fontSize: 16 }} aria-hidden="true" />
                   {t("faq.navLabel")}
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -323,9 +324,9 @@ export default async function HomePage() {
                 {isStaffView ? t("home.notificationsTitleStaff") : t("home.notificationsTitleStudent")}
               </h2>
               {isStaffView && notifications.length > 0 && (
-                <a href={notifQueueLink} style={{ color: colors.primary, fontSize: 13 }}>
+                <Link href={notifQueueLink} style={{ color: colors.primary, fontSize: 13 }}>
                   {t("home.viewAllInQueue")}
-                </a>
+                </Link>
               )}
             </div>
 
@@ -347,7 +348,7 @@ export default async function HomePage() {
               {notifications.map((n) => {
                 const meta = STATUS_META[n.status];
                 return (
-                  <a
+                  <Link
                     key={n.trackingId}
                     href={isStaffView ? notifQueueLink : `/status?q=${encodeURIComponent(n.trackingId)}`}
                     style={{
@@ -384,7 +385,7 @@ export default async function HomePage() {
                         {t(`status.${meta.key}`)}
                       </span>
                     )}
-                  </a>
+                  </Link>
                 );
               })}
             </div>

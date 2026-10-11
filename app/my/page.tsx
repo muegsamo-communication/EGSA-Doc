@@ -3,6 +3,7 @@ import { getSecretarySheet } from "@/lib/googleSheets";
 import { getTranslations } from "next-intl/server";
 import { colors, cardStyle, buttonPrimaryStyle } from "@/lib/theme";
 import MyDocumentsList, { MyDoc } from "./MyDocumentsList";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -81,9 +82,9 @@ export default async function MyPage() {
       {!error && docs.length === 0 && (
         <p style={{ color: colors.textSecondary, fontSize: 14 }}>
           {t("empty")}{" "}
-          <a href="/submit" style={{ color: colors.primary }}>
+          <Link href="/submit" style={{ color: colors.primary }}>
             {t("submitNew")}
-          </a>
+          </Link>
         </p>
       )}
 

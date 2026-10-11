@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useSendQueue, useSendJob } from "@/components/SendQueue";
 import type { AgencyOptions } from "@/lib/agencies";
 import { colors, inputStyle, buttonPrimaryStyle } from "@/lib/theme";
 
@@ -78,9 +80,23 @@ export default function SubmitForm({
   const [fileTooLarge, setFileTooLarge] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const [status, setStatus] = useState<"idle" | "loading" | "error" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [result, setResult] = useState<{ trackingId: string; docName: string } | null>(null);
+
+  // *** ส่งผ่านคิวเบื้องหลัง (components/SendQueue.tsx) ***
+  // ผู้ใช้เปลี่ยนไปหน้าอื่นในเว็บระหว่างส่งได้ ผลจะแจ้งเป็นกล่องแจ้งเตือนที่มุมจอ
+  // ถ้ายังอยู่หน้านี้ตอนส่งเสร็จ หน้านี้จะแสดงผลเอง (ไม่เด้งกล่องแจ้งเตือนซ้ำ)
+  const { enqueue, dismiss } = useSendQueue();
+  const [jobId, setJobId] = useState<string | null>(null);
+  const job = useSendJob(jobId);
+  const result =
+    job?.status === "done" && job.result?.trackingId
+      ? { trackingId: job.result.trackingId, docName: job.result.docName || job.label }
+      : null;
+
+  // ส่งไม่สำเร็จขณะยังอยู่หน้านี้: แสดงฟอร์มเดิม (ข้อมูลที่กรอกยังอยู่ครบ) พร้อมสาเหตุ
+  const shownError =
+    job?.status === "error" ? job.error || t("errGeneric") : status === "error" ? errorMsg : "";
 
   const selectedAgency = AGENCY_TYPES.find((a) => a.value === agencyType);
   const valueOptions = selectedAgency?.sheetKey ? agencyOptions[selectedAgency.sheetKey] : [];
@@ -161,8 +177,8 @@ export default function SubmitForm({
       return;
     }
 
-    setStatus("loading");
     setErrorMsg("");
+    if (jobId) dismiss(jobId); // ล้างผลการส่งครั้งก่อนที่ไม่สำเร็จ
 
     const formData = new FormData();
     formData.append("name", name.trim());
@@ -179,23 +195,53 @@ export default function SubmitForm({
     // *** Honeypot — ส่งค่าว่างเสมอสำหรับผู้ใช้จริง (ช่องนี้ซ่อนอยู่ คนมองไม่เห็น) ***
     formData.append("website", honeypot);
 
-    try {
-      const res = await fetch("/api/submit", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!data.success) {
-        setErrorMsg(data.error || "");
-        setStatus("error");
-        return;
-      }
-      setResult(data.data);
-      setStatus("success");
-    } catch (e) {
-      setErrorMsg(e instanceof Error ? e.message : "");
-      setStatus("error");
-    }
+    setStatus("idle");
+    setJobId(
+      enqueue({
+        kind: "submit",
+        label: docName.trim(),
+        request: { endpoint: "/api/submit", body: formData },
+      })
+    );
+    window.scrollTo({ top: 0 });
   }
 
-  if (status === "success" && result) {
+  if (job?.status === "sending") {
+    return (
+      <div style={{ maxWidth: 480, margin: "0 auto", padding: "24px 20px" }}>
+        <div style={{ background: colors.tint, border: `1px solid ${colors.tintBorder}`, borderRadius: 12, padding: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+            <span className="egsa-spinner egsa-spinner-dark" aria-hidden="true" />
+            <h1 style={{ fontSize: 18, color: colors.primaryDark, margin: 0 }}>{t("sendingTitle")}</h1>
+          </div>
+          <p style={{ margin: "0 0 12px", overflowWrap: "anywhere" }}>{t("sendingBody", { docName: job.label })}</p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 7,
+              padding: "9px 12px",
+              background: "#fff",
+              borderRadius: 6,
+              fontSize: 12,
+              color: colors.textSecondary,
+              lineHeight: 1.6,
+            }}
+          >
+            <i className="ti ti-info-circle" style={{ fontSize: 15, color: colors.primary, marginTop: 1, flexShrink: 0 }} aria-hidden="true" />
+            <span>{t("sendingHint")}</span>
+          </div>
+          <p style={{ fontSize: 13, marginTop: 12, marginBottom: 0 }}>
+            <Link href="/" style={{ color: colors.primary }}>
+              {t("sendingGoHome")}
+            </Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (result) {
     return (
       <div style={{ maxWidth: 480, margin: "0 auto", padding: "24px 20px" }}>
         <div style={{ background: colors.tint, border: `1px solid ${colors.tintBorder}`, borderRadius: 12, padding: 20 }}>
@@ -232,16 +278,16 @@ export default function SubmitForm({
 
           <p style={{ color: colors.textSecondary, fontSize: 13, marginTop: 12 }}>
             {t("keepTrackingId")}{" "}
-            <a href={`/status?q=${encodeURIComponent(result.trackingId)}`} style={{ color: colors.primary }}>
+            <Link href={`/status?q=${encodeURIComponent(result.trackingId)}`} style={{ color: colors.primary }}>
               {t("statusLink")}
-            </a>
+            </Link>
             {isLoggedIn && (
               <>
                 {" "}
                 {t("orSeeAll")}{" "}
-                <a href="/my" style={{ color: colors.primary }}>
+                <Link href="/my" style={{ color: colors.primary }}>
                   {t("myDocsLink")}
-                </a>
+                </Link>
               </>
             )}
           </p>
@@ -270,9 +316,9 @@ export default function SubmitForm({
       {!initialValues?.previousTrackingId && !isLoggedIn && (
         <div style={{ background: "#f5f5f5", border: "1px solid #ddd", borderRadius: 6, padding: 10, marginBottom: 16, fontSize: 12, color: colors.textSecondary }}>
           {t("loginHintBanner")}{" "}
-          <a href="/my" style={{ color: colors.primary }}>
+          <Link href="/my" style={{ color: colors.primary }}>
             {t("myDocsLink")}
-          </a>
+          </Link>
         </div>
       )}
 
@@ -556,7 +602,7 @@ export default function SubmitForm({
           </span>
         </label>
 
-        {status === "error" && <p style={{ color: "#b00020", fontSize: 13 }}>{errorMsg}</p>}
+        {shownError && <p style={{ color: "#b00020", fontSize: 13 }}>{shownError}</p>}
 
         <button
           onClick={handleSubmit}
@@ -568,9 +614,9 @@ export default function SubmitForm({
 
         <p style={{ textAlign: "center", fontSize: 12, color: colors.textMuted, margin: 0 }}>
           {t("needHelp")}{" "}
-          <a href="/faq" style={{ color: colors.primary }}>
+          <Link href="/faq" style={{ color: colors.primary }}>
             {t("needHelpLink")}
-          </a>
+          </Link>
         </p>
       </div>
     </div>

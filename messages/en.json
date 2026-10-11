@@ -152,7 +152,12 @@
     "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdUWRmrhl2948PwY_1WsOmAKL7Gr3ArFrGqPtoG4mn76MCWvA/viewform",
     "fileTooLargePrefillNote": "Your details will be filled in automatically — just attach the file, tick consent, and submit",
     "agencyOther": "Other",
-    "agencyOtherPlaceholder": "Enter your organization name"
+    "agencyOtherPlaceholder": "Enter your organization name",
+    "sendingTitle": "Sending your document…",
+    "sendingBody": "\"{docName}\" is being sent. This usually takes a few seconds to half a minute — your reference ID will appear here when it's done.",
+    "sendingHint": "You can move to other pages on this site meanwhile; a notice will pop up in the corner when it's done. Just don't close or refresh this tab until then.",
+    "sendingGoHome": "Back to home",
+    "errGeneric": "Sending failed, please try again"
   },
   "status": {
     "title": "Check Document Status",
@@ -371,5 +376,35 @@
     "section5Body": "To exercise any of the rights listed in Section 3, or if you have questions about your personal data, please contact us via the email shown at the bottom of every page on this site.",
     "referenceText": "Mahidol University Announcement on Personal Data Protection Policy B.E. 2563",
     "referenceUrl": "https://op.mahidol.ac.th/ra/contents/PRIVACY-POLICY/MU-PRIVACY-POLICY_TH.pdf"
+  },
+  "sendQueue": {
+    "regionLabel": "Sending status",
+    "sendingTitle": "Sending {count} item(s)",
+    "andMore": "and {count} more",
+    "keepTabOpen": "You can move to other pages on this site, but don't close or refresh this tab until sending finishes",
+    "kind": {
+      "submit": "Submit",
+      "approve": "Approve",
+      "reject": "Reject",
+      "advance": "Send to President"
+    },
+    "done": {
+      "submit": "Document submitted",
+      "approve": "Document approved",
+      "reject": "Document rejected",
+      "advance": "Sent to the President"
+    },
+    "failedTitle": "Sending failed",
+    "interruptedTitle": "Your last send may not have finished",
+    "interruptedBodySubmit": "The tab was closed or refreshed while sending. The document may or may not have arrived — check your confirmation email or My documents before submitting again.",
+    "interruptedBodyStaff": "The tab was closed or refreshed while sending. Check whether the document is still in the queue before trying again.",
+    "trackingIdLabel": "Reference ID",
+    "viewStatus": "View status",
+    "checkMyDocs": "My documents",
+    "retry": "Try again",
+    "close": "Close",
+    "genericError": "Something went wrong, please try again",
+    "networkError": "Couldn't connect — check your internet and try again",
+    "inProgress": "In progress…"
   }
 }
