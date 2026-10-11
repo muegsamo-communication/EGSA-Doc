@@ -37,7 +37,7 @@ export default async function SecretaryPage() {
         reviewer: "",
         fileUrl: cell(data.headers, row, "เอกสารที่ต้องการยื่น"),
         approveFormUrl: cell(data.headers, row, "ลิงก์อนุมัติ"),
-        rejectFormUrl: cell(data.headers, row, "ลิงก์ตีกลับ"),
+        rejectFormUrl: cell(data.headers, row, "ลิงก์ส่งผลการตรวจสอบ"),
       }));
   } catch (e) {
     error = e instanceof Error ? e.message : "Unknown error";
