@@ -43,6 +43,15 @@ export default function QueuePanel({
     () => new Set(jobs.filter((j) => j.status === "sending" && j.trackingId).map((j) => j.trackingId as string)),
     [jobs]
   );
+  // คำสั่งที่ส่งสำเร็จแล้ว แต่หน้ายังโหลดรายการใหม่ไม่เสร็จ — แสดงว่าสำเร็จแทนปุ่ม
+  // (ถ้าไม่ทำ ปุ่มเดิมจะเด้งกลับมาให้เห็นแวบหนึ่งก่อนเอกสารหายจากคิว)
+  const doneKinds = useMemo(() => {
+    const m = new Map<string, ActionKind>();
+    for (const j of jobs) {
+      if (j.status === "done" && j.trackingId && j.kind !== "submit") m.set(j.trackingId, j.kind as ActionKind);
+    }
+    return m;
+  }, [jobs]);
   const [search, setSearch] = useState("");
   const [agencyFilter, setAgencyFilter] = useState("");
   const [modal, setModal] = useState<{ doc: QueueDoc; action: ActionKind } | null>(null);
@@ -165,6 +174,7 @@ export default function QueuePanel({
           const pendingKey = mode === "secretary" ? "รอตรวจสอบ" : "รอเซ็น";
           const pending = statusColors[pendingKey];
           const busy = busyIds.has(doc.trackingId);
+          const doneKind = doneKinds.get(doc.trackingId);
           return (
             <div
               key={doc.trackingId}
@@ -239,7 +249,25 @@ export default function QueuePanel({
                     </div>
                   )}
 
-                  {busy ? (
+                  {doneKind ? (
+                    <div
+                      role="status"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginTop: 12,
+                        padding: "8px 12px",
+                        borderRadius: 8,
+                        background: "#f1f8f1",
+                        color: "#1b5e20",
+                        fontSize: 13,
+                      }}
+                    >
+                      <i className="ti ti-circle-check" style={{ fontSize: 17 }} aria-hidden="true" />
+                      {tsq(`done.${doneKind}`)}
+                    </div>
+                  ) : busy ? (
                     <div
                       style={{
                         display: "flex",
