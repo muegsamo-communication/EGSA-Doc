@@ -9,7 +9,8 @@
     "profile": "ข้อมูลส่วนตัว",
     "signOut": "ออกจากระบบ",
     "signIn": "เข้าสู่ระบบด้วย Google",
-    "orgShort": "ระบบส่งเอกสารสโมสรนักศึกษา"
+    "orgShort": "ระบบส่งเอกสารสโมสรนักศึกษา",
+    "guide": "คู่มือการใช้งาน"
   },
   "home": {
     "orgName": "ระบบส่งเอกสารสโมสรนักศึกษา",
@@ -332,7 +333,9 @@
     "statusPending": "รอตรวจสอบ",
     "statusWaitingSign": "รอเซ็น",
     "statusApproved": "อนุมัติแล้ว",
-    "statusRejected": "ตีกลับ"
+    "statusRejected": "ตีกลับ",
+    "guideBannerText": "ขั้นตอนละเอียดพร้อมภาพหน้าจอของทุกตำแหน่ง อยู่ในคู่มือการใช้งาน",
+    "guideBannerLink": "เปิดคู่มือการใช้งาน"
   },
   "faq": {
     "navLabel": "คำถามที่พบบ่อย",

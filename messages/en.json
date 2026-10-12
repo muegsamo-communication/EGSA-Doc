@@ -9,7 +9,8 @@
     "profile": "Profile",
     "signOut": "Sign out",
     "signIn": "Sign in with Google",
-    "orgShort": "EGSA Doc System"
+    "orgShort": "EGSA Doc System",
+    "guide": "User Guide"
   },
   "home": {
     "orgName": "Student Union Document System",
@@ -332,7 +333,9 @@
     "statusPending": "Pending Review",
     "statusWaitingSign": "Pending Signature",
     "statusApproved": "Approved",
-    "statusRejected": "Rejected"
+    "statusRejected": "Rejected",
+    "guideBannerText": "Step-by-step instructions with screenshots for every role are in the User Guide",
+    "guideBannerLink": "Open the User Guide"
   },
   "faq": {
     "navLabel": "FAQ",
